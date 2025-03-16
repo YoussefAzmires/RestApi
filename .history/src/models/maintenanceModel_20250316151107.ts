@@ -82,7 +82,7 @@ async function addMaintenanceRecord(
       const msg = "Unexpected error occured in addMaintenanceRecord" + err.message;
       throw new DatabaseError(err.message);
     } else {
-      const msg = "Unknown issue caught in addMaintenanceRecord. Should not happen";
+      const msg = "Unknoqn issue caught in addMaintenanceRecord. Should not happen";
       console.error(msg);
       throw new DatabaseError(msg);
     }
