@@ -1,11 +1,13 @@
-import { MongoClient, Db, MongoError, Collection } from "mongodb";
-import { DatabaseError } from "../errorController";
+import { MongoClient, Db, MongoError, Collection } from 'mongodb';
+import { DatabaseError } from '../errorController';
 let client: MongoClient;
 let db: Db;
-let maintenanceCollection: Collection<MaintenanceRecord>;
+let maintenanceCollection: Collection<MaintenanceRecord>; 
 const dbname = "car_maintenance";
 
 async function initialize(): Promise<void> {
+
+
   //TODO I CANT RUN FROM IDE SO I NEED TO HARDCODE THE URI HERE AND RUN FROM TERMINAL FIX LATER.
 
   // try {
@@ -22,12 +24,13 @@ async function initialize(): Promise<void> {
   //     );
   //   }
   try {
-    const MONGODB_URI =
-      "mongodb+srv://admin:admin@cluster0.cff59.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+    const MONGODB_URI="mongodb+srv://admin:admin@cluster0.cff59.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
-    console.log(MONGODB_URI);
+    console.log(MONGODB_URI)
     const url = `${MONGODB_URI}`;
-    if (!MONGODB_URI) {
+    if (
+      !MONGODB_URI
+    ) {
       throw new Error(
         "Missing required environment variables to connect to MongoDB"
       );
@@ -59,33 +62,19 @@ async function initialize(): Promise<void> {
  * Interface for a maintenance record
  */
 interface MaintenanceRecord {
-  carPart: string; // The name of the car part to be changed, Ex: brake pads
-  lastChanged: Date; // Date when the part was last changed
-  nextChange: Date; // Date when the part should be changed next
+    carPart: string; // The name of the car part to be changed, Ex: brake pads
+    lastChanged: Date; // Date when the part was last changed
+    nextChange: Date; // Date when the part should be changed next
 }
 
-async function addMaintenanceRecord(
-  record: MaintenanceRecord
-): Promise<MaintenanceRecord> {
+async function addMaintenanceRecord(record: MaintenanceRecord): Promise<MaintenanceRecord> {
   if (!maintenanceCollection) {
-    throw new DatabaseError("Collection not initialized");
+    throw new DatabaseError ("Collection not initialized");
   }
-  try {
+  try{
     const result = await maintenanceCollection.insertOne(record);
-    console.log("ID of the inserted maintenance record: " + result?.insertedId);
-    return record;
-  } catch (err: unknown) {
-    if (err instanceof MongoError) {
-      console.log(err.message);
-      throw new Error(err.message);
-    } else if (err instanceof Error) {
-      const msg = "Unexpected error occured in addCar" + err.message;
-      throw new DatabaseError(err.message);
-    } else {
-      const msg = "Unknoqn issue caught in addCar. Should not happen";
-      console.error(msg);
-      throw new DatabaseError(msg);
-    }
+    console.log("ID of the inserted maintenance record: " + result?.insertedId); 
+
   }
 }
 
