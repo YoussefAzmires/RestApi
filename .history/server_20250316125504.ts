@@ -2,7 +2,7 @@ import express from 'express';
 import { initialize } from './src/models/maintenanceModel';
 
 const app = express();
-console.log('is my code working?');
+
 async function startServer() {
     console.log('Starting server...');
     try {
