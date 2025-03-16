@@ -61,7 +61,7 @@ async function initialize(): Promise<void> {
 interface MaintenanceRecord {
   carPart: string; // The name of the car part to be changed, Ex: brake pads
   lastChanged: Date; // Date when the part was last changed
-  nextChange?: Date; // Date when the part should be changed next
+  nextChange: Date; // Date when the part should be changed next
 }
 
 async function addMaintenanceRecord(
@@ -89,4 +89,4 @@ async function addMaintenanceRecord(
   }
 }
 
-export { initialize, maintenanceCollection, MaintenanceRecord, addMaintenanceRecord };
+export { initialize, maintenanceCollection, MaintenanceRecord };
