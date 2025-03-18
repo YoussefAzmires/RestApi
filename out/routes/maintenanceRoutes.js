@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const maintenanceModel_1 = require("../src/models/maintenanceModel");
+const maintenanceModel_2 = require("../src/models/maintenanceModel");
 const router = express_1.default.Router();
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -25,6 +26,17 @@ router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const insertedRecord = yield (0, maintenanceModel_1.addMaintenanceRecord)(record);
         console.log(insertedRecord);
         res.status(201).json(insertedRecord);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('An error occurred');
+    }
+}));
+router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const records = yield (0, maintenanceModel_2.getAllMaintenanceRecord)();
+        console.log(records);
+        res.status(201).json(records);
     }
     catch (err) {
         console.error(err);

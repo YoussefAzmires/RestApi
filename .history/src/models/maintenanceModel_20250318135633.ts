@@ -63,11 +63,7 @@ interface MaintenanceRecord {
   lastChanged: Date; // Date when the part was last changed
   nextChange?: Date; // Date when the part should be changed next
 }
-/**
- * Inserts a Maintenance Record into the database.
- * @param record The variable of type MaintenanceRecord to be inserted into the database
- * @returns the record that waas inserted into the database.
- */
+
 async function addMaintenanceRecord( record: MaintenanceRecord): Promise<MaintenanceRecord> {
   if (!maintenanceCollection) {
     throw new DatabaseError("Collection not initialized");

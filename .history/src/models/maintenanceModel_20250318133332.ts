@@ -63,11 +63,7 @@ interface MaintenanceRecord {
   lastChanged: Date; // Date when the part was last changed
   nextChange?: Date; // Date when the part should be changed next
 }
-/**
- * Inserts a Maintenance Record into the database.
- * @param record The variable of type MaintenanceRecord to be inserted into the database
- * @returns the record that waas inserted into the database.
- */
+
 async function addMaintenanceRecord( record: MaintenanceRecord): Promise<MaintenanceRecord> {
   if (!maintenanceCollection) {
     throw new DatabaseError("Collection not initialized");
@@ -90,31 +86,5 @@ async function addMaintenanceRecord( record: MaintenanceRecord): Promise<Mainten
     }
   }
 }
-/**
- * Gets all the maintenance records from the database
- * @returns An array of all the maintenance records found.
- */
-async function getAllMaintenanceRecord(): Promise<Array<MaintenanceRecord>> {
-  if (!maintenanceCollection) {
-    throw new DatabaseError("Collection not initialized");
-  }
-  try {
-    const records =(await maintenanceCollection.find({})).toArray();
-    console.log(`Fetches list of records: ${records}`);  
-    return records;
-  } catch (err: unknown) {
-    if (err instanceof MongoError) {
-      console.log(err.message);
-      throw new Error(err.message);
-    } else if (err instanceof Error) {
-      const msg = "Unexpected error occured in addMaintenanceRecord" + err.message;
-      throw new DatabaseError(err.message);
-    } else {
-      const msg = "Unknown issue caught in addMaintenanceRecord. Should not happen";
-      console.error(msg);
-      throw new DatabaseError(msg);
-    }
-  }
-}
 
-export { initialize, maintenanceCollection, MaintenanceRecord, addMaintenanceRecord, getAllMaintenanceRecord };
+export { initialize, maintenanceCollection, MaintenanceRecord, addMaintenanceRecord };

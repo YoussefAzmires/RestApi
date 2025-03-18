@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.maintenanceCollection = void 0;
 exports.initialize = initialize;
 exports.addMaintenanceRecord = addMaintenanceRecord;
+exports.getAllMaintenanceRecord = getAllMaintenanceRecord;
 const mongodb_1 = require("mongodb");
 const errorController_1 = require("../errorController");
 let client;
@@ -73,6 +74,33 @@ function addMaintenanceRecord(record) {
             const result = yield maintenanceCollection.insertOne(record);
             console.log("Inserted maintenance record: " + result.insertedId);
             return record;
+        }
+        catch (err) {
+            if (err instanceof mongodb_1.MongoError) {
+                console.log(err.message);
+                throw new Error(err.message);
+            }
+            else if (err instanceof Error) {
+                const msg = "Unexpected error occured in addMaintenanceRecord" + err.message;
+                throw new errorController_1.DatabaseError(err.message);
+            }
+            else {
+                const msg = "Unknown issue caught in addMaintenanceRecord. Should not happen";
+                console.error(msg);
+                throw new errorController_1.DatabaseError(msg);
+            }
+        }
+    });
+}
+function getAllMaintenanceRecord() {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!maintenanceCollection) {
+            throw new errorController_1.DatabaseError("Collection not initialized");
+        }
+        try {
+            const records = (yield maintenanceCollection.find({})).toArray();
+            console.log(`Fetches list of records: ${records}`);
+            return records;
         }
         catch (err) {
             if (err instanceof mongodb_1.MongoError) {
