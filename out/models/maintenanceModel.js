@@ -71,7 +71,7 @@ function addMaintenanceRecord(record) {
         }
         try {
             const result = yield maintenanceCollection.insertOne(record);
-            console.log("Inserted maintenance record: " + record);
+            console.log("Inserted maintenance record: " + result.insertedId);
             return record;
         }
         catch (err) {
@@ -80,11 +80,11 @@ function addMaintenanceRecord(record) {
                 throw new Error(err.message);
             }
             else if (err instanceof Error) {
-                const msg = "Unexpected error occured in addCar" + err.message;
+                const msg = "Unexpected error occured in addMaintenanceRecord" + err.message;
                 throw new errorController_1.DatabaseError(err.message);
             }
             else {
-                const msg = "Unknoqn issue caught in addCar. Should not happen";
+                const msg = "Unknown issue caught in addMaintenanceRecord. Should not happen";
                 console.error(msg);
                 throw new errorController_1.DatabaseError(msg);
             }
