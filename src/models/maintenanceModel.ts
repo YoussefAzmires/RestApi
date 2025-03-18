@@ -68,12 +68,8 @@ interface MaintenanceRecord {
  * @param record The variable of type MaintenanceRecord to be inserted into the database
  * @returns the record that waas inserted into the database.
  */
-async function addMaintenanceRecord(
-  record: MaintenanceRecord
-): Promise<MaintenanceRecord | null> {
-  if (!maintenanceCollection) {
-    throw new DatabaseError("Collection not initialized");
-  }
+async function addMaintenanceRecord(record: MaintenanceRecord): Promise<MaintenanceRecord | null> {
+  checkIfCollectionInitialized();
   try {
     const result = await maintenanceCollection.insertOne(record);
     console.log("Inserted maintenance record: " + result.insertedId);
@@ -95,9 +91,7 @@ async function addMaintenanceRecord(
   }
 }
 async function getOneMaintenanceRecord(carPart: string): Promise<MaintenanceRecord | null> {
-  if (!maintenanceCollection) {
-    throw new DatabaseError("Collection not initialized");
-  }
+  checkIfCollectionInitialized()
   try {
     const record = (await maintenanceCollection.findOne({ carPart: carPart })) || null;
     console.log(`Fetched record:`, record);
@@ -123,9 +117,8 @@ async function getOneMaintenanceRecord(carPart: string): Promise<MaintenanceReco
  * @returns An array of all the maintenance records found.
  */
 async function getAllMaintenanceRecord(): Promise<Array<MaintenanceRecord>> {
-  if (!maintenanceCollection) {
-    throw new DatabaseError("Collection not initialized");
-  }
+
+  checkIfCollectionInitialized()
   try {
     const records = (await maintenanceCollection.find({})).toArray();
     console.log(`Fetches list of records: ${records}`);
@@ -147,11 +140,52 @@ async function getAllMaintenanceRecord(): Promise<Array<MaintenanceRecord>> {
   }
 }
 
+/**
+ * Takes a name of a car part and deletes it from the database.
+ * @param carPart the name of the carPart record to be deleted
+ * @returns 
+ */
+async function deleteOneMaintenanceRecord(carPart: string): Promise<void | null> {
+  checkIfCollectionInitialized();
+
+  try {
+    const result = await maintenanceCollection.deleteOne({ carPart: carPart });
+    
+    if (result.deletedCount === 0) {
+      console.log(`No record found for car part: ${carPart}`);
+      return null;
+    }
+
+    console.log(`Deleted record for car part: ${carPart}`);
+    return; 
+
+  } catch (err: unknown) {
+    if (err instanceof MongoError) {
+      console.log(err.message);
+      throw new Error(err.message);
+    } else if (err instanceof Error) {
+      const msg = "Unexpected error occurred in deleteOneMaintenanceRecord: " + err.message;
+      throw new DatabaseError(msg);
+    } else {
+      const msg = "Unknown issue caught in deleteOneMaintenanceRecord. Should not happen";
+      console.error(msg);
+      throw new DatabaseError(msg);
+    }
+  }
+}
+
+function checkIfCollectionInitialized (): void{
+  if (!maintenanceCollection) {
+    throw new DatabaseError("Collection not initialized");
+  }
+}
 export {
   initialize,
   maintenanceCollection,
   MaintenanceRecord,
   addMaintenanceRecord,
   getAllMaintenanceRecord,
-  getOneMaintenanceRecord
+  getOneMaintenanceRecord,
+  deleteOneMaintenanceRecord
 };
+

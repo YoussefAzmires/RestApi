@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const maintenanceModel_1 = require("../src/models/maintenanceModel");
 const maintenanceModel_2 = require("../src/models/maintenanceModel");
+const maintenanceModel_3 = require("../src/models/maintenanceModel");
 const router = express_1.default.Router();
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -41,6 +42,21 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     catch (err) {
         console.error(err);
         res.status(500).send('An error occurred');
+    }
+}));
+router.get('/carPart/:carPart', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const carPart = req.params.carPart;
+        if (!carPart) {
+            //return res.status(400).json({ error: "Missing carPart parameter" });
+        }
+        const record = yield (0, maintenanceModel_3.getOneMaintenanceRecord)(carPart);
+        console.log(record);
+        res.status(200).json(record);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred' });
     }
 }));
 exports.default = router;

@@ -1,0 +1,3 @@
+
+TO GET SINGLE MAINTENANCE OBJECT WITH CAR PART    http://localhost:3000/maintenance/carPart/brake pads
+TO GET ALL MAINTENANCE OBJECTS http://localhost:3000/maintenance

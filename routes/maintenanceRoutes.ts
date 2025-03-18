@@ -37,22 +37,46 @@ router.get('/', async (req:Request, res: Response)=>{
         res.status(500).send('An error occurred');
     }
 })
-// router.get('/carPart/:carPart', async (req: Request, res: Response) => {
-//     try {
-//         const carPart = req.params.carPart; // Extract URL parameter
-//         if (!carPart) {
-//             return res.status(400).json({ error: "Missing carPart parameter" });
+
+
+
+
+router.get('/carPart/:carPart', async (req: Request, res: Response) => {
+    try {
+        const carPart = req.params.carPart;
+        if(!carPart){
+            //return res.status(400).json({ error: "Missing carPart parameter" });
+
+        }
+        const record = await getOneMaintenanceRecord(carPart)
+        console.log(record)
+        res.status(200).json(record)
+    }
+    catch(err){
+        console.error(err)
+        res.status(500).json({ error: 'An error occurred' });
+    }
+})
+
+router.delete('/carPart/:carPart', async (req: Request, res: Response) => {
+    try{
+        const carPart = req.params.carPart;
+        if(!carPart){
+            //return res.status(400).json({ error: "Missing carPart parameter" });
+        }
+        const 
+    }
+})
+
+// router.delete('/carPart/:carPart', handleDeleteRecord()) => {
+//     try{
+//         const carPart = req.params.carPart;
+//         if(!carPart){
+//             //return res.status(400).json({ error: "Missing carPart parameter" });
 //         }
-
-//         const record = await getOneMaintenanceRecord(carPart);
-//         console.log(record);
-//         res.status(200).json(record);
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).json({ error: 'An error occurred' });
+//         const 
 //     }
-// });
-
+// })
 
 
 export default router;
