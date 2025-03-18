@@ -108,11 +108,11 @@ async function getOneMaintenanceRecord(carPart: string): Promise<MaintenanceReco
       throw new Error(err.message);
     } else if (err instanceof Error) {
       const msg =
-        "Unexpected error occured in getOneMaintenanceRecord" + err.message;
+        "Unexpected error occured in addMaintenanceRecord" + err.message;
       throw new DatabaseError(err.message);
     } else {
       const msg =
-        "Unknown issue caught in getOneMaintenanceRecord. Should not happen";
+        "Unknown issue caught in addMaintenanceRecord. Should not happen";
       console.error(msg);
       throw new DatabaseError(msg);
     }
@@ -153,5 +153,4 @@ export {
   MaintenanceRecord,
   addMaintenanceRecord,
   getAllMaintenanceRecord,
-  getOneMaintenanceRecord
 };

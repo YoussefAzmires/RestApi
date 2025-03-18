@@ -68,55 +68,50 @@ interface MaintenanceRecord {
  * @param record The variable of type MaintenanceRecord to be inserted into the database
  * @returns the record that waas inserted into the database.
  */
-async function addMaintenanceRecord(
-  record: MaintenanceRecord
-): Promise<MaintenanceRecord | null> {
+async function addMaintenanceRecord( record: MaintenanceRecord): Promise<MaintenanceRecord|null> {
   if (!maintenanceCollection) {
     throw new DatabaseError("Collection not initialized");
   }
   try {
     const result = await maintenanceCollection.insertOne(record);
-    console.log("Inserted maintenance record: " + result.insertedId);
+    console.log("Inserted maintenance record: " + result.insertedId);  
     return record;
   } catch (err: unknown) {
     if (err instanceof MongoError) {
       console.log(err.message);
       throw new Error(err.message);
     } else if (err instanceof Error) {
-      const msg =
-        "Unexpected error occured in addMaintenanceRecord" + err.message;
+      const msg = "Unexpected error occured in addMaintenanceRecord" + err.message;
       throw new DatabaseError(err.message);
     } else {
-      const msg =
-        "Unknown issue caught in addMaintenanceRecord. Should not happen";
+      const msg = "Unknown issue caught in addMaintenanceRecord. Should not happen";
       console.error(msg);
       throw new DatabaseError(msg);
     }
   }
 }
-async function getOneMaintenanceRecord(carPart: string): Promise<MaintenanceRecord | null> {
+async function getOneMaintenanceRecord(carPart:string) : Promise<MaintenanceRecord>{
   if (!maintenanceCollection) {
     throw new DatabaseError("Collection not initialized");
   }
   try {
-    const record = (await maintenanceCollection.findOne({ carPart: carPart })) || null;
-    console.log(`Fetched record:`, record);
-    return record;
-  } catch (err: unknown) {
+    const record = await maintenanceCollection.findOne({ carPart: carPart }) || null;
+    console.log(`Fetched record:`, record);  
+    return record; 
+} catch (err: unknown) {
     if (err instanceof MongoError) {
       console.log(err.message);
       throw new Error(err.message);
     } else if (err instanceof Error) {
-      const msg =
-        "Unexpected error occured in getOneMaintenanceRecord" + err.message;
+      const msg = "Unexpected error occured in addMaintenanceRecord" + err.message;
       throw new DatabaseError(err.message);
     } else {
-      const msg =
-        "Unknown issue caught in getOneMaintenanceRecord. Should not happen";
+      const msg = "Unknown issue caught in addMaintenanceRecord. Should not happen";
       console.error(msg);
       throw new DatabaseError(msg);
     }
   }
+
 }
 /**
  * Gets all the maintenance records from the database
@@ -127,31 +122,22 @@ async function getAllMaintenanceRecord(): Promise<Array<MaintenanceRecord>> {
     throw new DatabaseError("Collection not initialized");
   }
   try {
-    const records = (await maintenanceCollection.find({})).toArray();
-    console.log(`Fetches list of records: ${records}`);
+    const records =(await maintenanceCollection.find({})).toArray();
+    console.log(`Fetches list of records: ${records}`);  
     return records;
   } catch (err: unknown) {
     if (err instanceof MongoError) {
       console.log(err.message);
       throw new Error(err.message);
     } else if (err instanceof Error) {
-      const msg =
-        "Unexpected error occured in addMaintenanceRecord" + err.message;
+      const msg = "Unexpected error occured in addMaintenanceRecord" + err.message;
       throw new DatabaseError(err.message);
     } else {
-      const msg =
-        "Unknown issue caught in addMaintenanceRecord. Should not happen";
+      const msg = "Unknown issue caught in addMaintenanceRecord. Should not happen";
       console.error(msg);
       throw new DatabaseError(msg);
     }
   }
 }
 
-export {
-  initialize,
-  maintenanceCollection,
-  MaintenanceRecord,
-  addMaintenanceRecord,
-  getAllMaintenanceRecord,
-  getOneMaintenanceRecord
-};
+export { initialize, maintenanceCollection, MaintenanceRecord, addMaintenanceRecord, getAllMaintenanceRecord };

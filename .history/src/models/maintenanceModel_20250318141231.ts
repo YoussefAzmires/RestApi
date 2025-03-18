@@ -153,5 +153,4 @@ export {
   MaintenanceRecord,
   addMaintenanceRecord,
   getAllMaintenanceRecord,
-  getOneMaintenanceRecord
 };
