@@ -12,6 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.maintenanceCollection = void 0;
 exports.initialize = initialize;
 exports.addMaintenanceRecord = addMaintenanceRecord;
+exports.getAllMaintenanceRecord = getAllMaintenanceRecord;
+exports.getOneMaintenanceRecord = getOneMaintenanceRecord;
+exports.deleteOneMaintenanceRecord = deleteOneMaintenanceRecord;
 const mongodb_1 = require("mongodb");
 const errorController_1 = require("../errorController");
 let client;
@@ -64,11 +67,14 @@ function initialize() {
         }
     });
 }
+/**
+ * Inserts a Maintenance Record into the database.
+ * @param record The variable of type MaintenanceRecord to be inserted into the database
+ * @returns the record that waas inserted into the database.
+ */
 function addMaintenanceRecord(record) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (!maintenanceCollection) {
-            throw new errorController_1.DatabaseError("Collection not initialized");
-        }
+        checkIfCollectionInitialized();
         try {
             const result = yield maintenanceCollection.insertOne(record);
             console.log("Inserted maintenance record: " + result.insertedId);
@@ -90,5 +96,98 @@ function addMaintenanceRecord(record) {
             }
         }
     });
+}
+function getOneMaintenanceRecord(carPart) {
+    return __awaiter(this, void 0, void 0, function* () {
+        checkIfCollectionInitialized();
+        try {
+            const record = (yield maintenanceCollection.findOne({ carPart: carPart })) || null;
+            console.log(`Fetched record:`, record);
+            return record;
+        }
+        catch (err) {
+            if (err instanceof mongodb_1.MongoError) {
+                console.log(err.message);
+                throw new Error(err.message);
+            }
+            else if (err instanceof Error) {
+                const msg = "Unexpected error occured in getOneMaintenanceRecord" + err.message;
+                throw new errorController_1.DatabaseError(err.message);
+            }
+            else {
+                const msg = "Unknown issue caught in getOneMaintenanceRecord. Should not happen";
+                console.error(msg);
+                throw new errorController_1.DatabaseError(msg);
+            }
+        }
+    });
+}
+/**
+ * Gets all the maintenance records from the database
+ * @returns An array of all the maintenance records found.
+ */
+function getAllMaintenanceRecord() {
+    return __awaiter(this, void 0, void 0, function* () {
+        checkIfCollectionInitialized();
+        try {
+            const records = (yield maintenanceCollection.find({})).toArray();
+            console.log(`Fetches list of records: ${records}`);
+            return records;
+        }
+        catch (err) {
+            if (err instanceof mongodb_1.MongoError) {
+                console.log(err.message);
+                throw new Error(err.message);
+            }
+            else if (err instanceof Error) {
+                const msg = "Unexpected error occured in addMaintenanceRecord" + err.message;
+                throw new errorController_1.DatabaseError(err.message);
+            }
+            else {
+                const msg = "Unknown issue caught in addMaintenanceRecord. Should not happen";
+                console.error(msg);
+                throw new errorController_1.DatabaseError(msg);
+            }
+        }
+    });
+}
+/**
+ * Takes a name of a car part and deletes it from the database.
+ * @param carPart the name of the carPart record to be deleted
+ * @returns
+ */
+function deleteOneMaintenanceRecord(carPart) {
+    return __awaiter(this, void 0, void 0, function* () {
+        checkIfCollectionInitialized();
+        try {
+            const result = yield maintenanceCollection.deleteOne({ carPart: carPart });
+            if (result.deletedCount === 0) {
+                console.log(`No record found for car part: ${carPart}`);
+                return null;
+            }
+            console.log(`Deleted record for car part: ${carPart}`);
+            return;
+        }
+        catch (err) {
+            if (err instanceof mongodb_1.MongoError) {
+                console.log(err.message);
+                throw new Error(err.message);
+            }
+            else if (err instanceof Error) {
+                const msg = "Unexpected error occurred in deleteOneMaintenanceRecord: " + err.message;
+                throw new errorController_1.DatabaseError(msg);
+            }
+            else {
+                const msg = "Unknown issue caught in deleteOneMaintenanceRecord. Should not happen";
+                console.error(msg);
+                throw new errorController_1.DatabaseError(msg);
+            }
+        }
+    });
+}
+function checkIfCollectionInitialized() {
+    if (!maintenanceCollection) {
+        throw new errorController_1.DatabaseError("Collection not initialized");
+    }
 }
 //# sourceMappingURL=maintenanceModel.js.map

@@ -13,13 +13,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const maintenanecModel_1 = require("./src/models/maintenanecModel");
+const maintenanceModel_1 = require("./models/maintenanceModel");
+const maintenanceRoutes_1 = __importDefault(require("./maintenanceRoutes"));
 const app = (0, express_1.default)();
+app.use(express_1.default.json());
 function startServer() {
     return __awaiter(this, void 0, void 0, function* () {
         console.log('Starting server...');
-        yield (0, maintenanecModel_1.initialize)();
-        app.listen(3000, () => console.log('Server listening on port 3000'));
+        try {
+            yield (0, maintenanceModel_1.initialize)(); // Ensure DB connection
+            app.use('/maintenance', maintenanceRoutes_1.default); // Add the maintenance routes
+            app.listen(3000, () => console.log('Server listening on port 3000'));
+        }
+        catch (err) {
+            console.error('Error during initialization:', err);
+        }
     });
 }
 startServer().catch((err) => console.error(err));

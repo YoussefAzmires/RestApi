@@ -1,6 +1,6 @@
 import express from 'express';
 import { initialize } from './models/maintenanceModel';
-import maintenanceRoutes from './maintenanceRoutes'; 
+import maintenanceRoutes from '../routes/maintenanceRoutes'; 
 
 const app = express();
 
