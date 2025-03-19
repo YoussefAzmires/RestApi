@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getOneMaintenanceRecord, getAllMaintenanceRecord, addMaintenanceRecord} from "./models/maintenanceModel";
+import { getOneMaintenanceRecord, getAllMaintenanceRecord, addMaintenanceRecord, deleteOneMaintenanceRecord} from "./models/maintenanceModel";
 
 async function handleGetOneMaintenanceRecord(req: Request, res: Response): Promise<void> {
     try {
@@ -27,7 +27,11 @@ async function handleGetAllMaintenanceRecord(req: Request, res: Response): Promi
         res.status(500).send('An error occurred');
     }
 }
-
+/**
+ * 
+ * @param req 
+ * @param res 
+ */
 async function handleAddMaintenanceRecord(req: Request, res: Response): Promise<void> {
     try {
         const record = req.body;
@@ -43,6 +47,30 @@ async function handleAddMaintenanceRecord(req: Request, res: Response): Promise<
     }
 }
 
+/**
+ * 
+ * @param req 
+ * @param res 
+ */
+async function handleDeleteOneMaintenanceRecord(req: Request, res: Response): Promise<void> {
+    try {
+        const { carPart } = req.body;  
+        if (!carPart) {
+             res.status(400).json({ error: "Missing carPart in request body" });
+        }
+
+        const result = await deleteOneMaintenanceRecord(carPart);
+        if (result === null) {
+             res.status(404).json({ error: "Maintenance record not found" });
+        }
+
+        res.status(200).json({ message: `Deleted record for car part: ${carPart}` });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "An error occurred" });
+    }
+}
 
 
-export { handleGetOneMaintenanceRecord , handleGetAllMaintenanceRecord, handleAddMaintenanceRecord};
+
+export { handleGetOneMaintenanceRecord , handleGetAllMaintenanceRecord, handleAddMaintenanceRecord, handleDeleteOneMaintenanceRecord};

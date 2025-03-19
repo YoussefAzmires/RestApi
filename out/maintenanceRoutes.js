@@ -9,14 +9,6 @@ const router = express_1.default.Router();
 router.post("/", maintenanceController_1.handleAddMaintenanceRecord);
 router.get("/", maintenanceController_1.handleGetAllMaintenanceRecord);
 router.get("/carPart/:carPart", maintenanceController_1.handleGetOneMaintenanceRecord);
-// router.delete('/carPart/:carPart', async (req: Request, res: Response) => {
-//     try{
-//         const carPart = req.params.carPart;
-//         if(!carPart){
-//             //return res.status(400).json({ error: "Missing carPart parameter" });
-//         }
-//         const 
-//     }
-// })
+router.delete('/carPart', maintenanceController_1.handleDeleteOneMaintenanceRecord);
 exports.default = router;
 //# sourceMappingURL=maintenanceRoutes.js.map
