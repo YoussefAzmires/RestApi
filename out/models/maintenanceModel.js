@@ -17,7 +17,7 @@ exports.getOneMaintenanceRecord = getOneMaintenanceRecord;
 exports.deleteOneMaintenanceRecord = deleteOneMaintenanceRecord;
 exports.updateOneMaintenanceRecord = updateOneMaintenanceRecord;
 const mongodb_1 = require("mongodb");
-const errorController_1 = require("../errorController");
+const errorController_1 = require("../Controller/errorController");
 let client;
 let db;
 let maintenanceCollection;

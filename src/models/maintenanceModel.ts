@@ -1,5 +1,5 @@
 import { MongoClient, Db, MongoError, Collection } from "mongodb";
-import { DatabaseError } from "../errorController";
+import { DatabaseError } from "../Controller/errorController";
 import { resourceUsage } from "process";
 let client: MongoClient;
 let db: Db;
