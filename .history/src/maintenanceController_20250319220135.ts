@@ -50,7 +50,7 @@ async function handleAddMaintenanceRecord(req: Request, res: Response): Promise<
 
 async function handleUpdateMaintenanceRecord(req: Request, res: Response): Promise<void> {
     try {
-        const carPart = req.params.carPart; 
+        const carPart = req.params.carPart;  
         const updatedData = req.body;  
         
         const existingRecord = await getOneMaintenanceRecord(carPart);
@@ -59,7 +59,6 @@ async function handleUpdateMaintenanceRecord(req: Request, res: Response): Promi
             return;
         }
         
-        // Update the record
         const updatedRecord = await updateOneMaintenanceRecord(existingRecord, updatedData);
         
         if (!updatedRecord) {
@@ -102,4 +101,4 @@ async function handleDeleteOneMaintenanceRecord(req: Request, res: Response): Pr
 
 
 
-export { handleGetOneMaintenanceRecord , handleGetAllMaintenanceRecord, handleAddMaintenanceRecord, handleDeleteOneMaintenanceRecord, handleUpdateMaintenanceRecord};
+export { handleGetOneMaintenanceRecord , handleGetAllMaintenanceRecord, handleAddMaintenanceRecord, handleDeleteOneMaintenanceRecord};

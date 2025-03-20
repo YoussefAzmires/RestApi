@@ -47,27 +47,16 @@ async function handleAddMaintenanceRecord(req: Request, res: Response): Promise<
     }
 }
 
-
-async function handleUpdateMaintenanceRecord(req: Request, res: Response): Promise<void> {
+async function handleUpdateOneMaintenanceRecord(req: Request, res: Response): Promise<void> {
     try {
-        const carPart = req.params.carPart; 
-        const updatedData = req.body;  
-        
-        const existingRecord = await getOneMaintenanceRecord(carPart);
-        if (!existingRecord) {
-            res.status(404).json({ error: "Maintenance record not found" });
-            return;
+        const oldRecord = req.body.oldRecord;
+        const newRecord = req.body.newRecord;
+        if (!oldRecord || !newRecord) {
+            res.status(400).json({ error: "Missing maintenance record data" });
         }
-        
-        // Update the record
-        const updatedRecord = await updateOneMaintenanceRecord(existingRecord, updatedData);
-        
-        if (!updatedRecord) {
-            res.status(404).json({ error: "Update failed" });
-            return;
-        }
-        
-        res.status(200).json(updatedRecord);
+        const updatedRecord = await updateOneMaintenanceRecord(oldRecord, newRecord);
+        console.log(updatedRecord);
+        res.status(201).json(updatedRecord);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "An error occurred" });
@@ -102,4 +91,4 @@ async function handleDeleteOneMaintenanceRecord(req: Request, res: Response): Pr
 
 
 
-export { handleGetOneMaintenanceRecord , handleGetAllMaintenanceRecord, handleAddMaintenanceRecord, handleDeleteOneMaintenanceRecord, handleUpdateMaintenanceRecord};
+export { handleGetOneMaintenanceRecord , handleGetAllMaintenanceRecord, handleAddMaintenanceRecord, handleDeleteOneMaintenanceRecord};

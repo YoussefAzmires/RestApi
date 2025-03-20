@@ -15,6 +15,7 @@ exports.addMaintenanceRecord = addMaintenanceRecord;
 exports.getAllMaintenanceRecord = getAllMaintenanceRecord;
 exports.getOneMaintenanceRecord = getOneMaintenanceRecord;
 exports.deleteOneMaintenanceRecord = deleteOneMaintenanceRecord;
+exports.updateOneMaintenanceRecord = updateOneMaintenanceRecord;
 const mongodb_1 = require("mongodb");
 const errorController_1 = require("../errorController");
 let client;
@@ -185,6 +186,41 @@ function deleteOneMaintenanceRecord(carPart) {
         }
     });
 }
+function updateOneMaintenanceRecord(oldRecord, newRecord) {
+    return __awaiter(this, void 0, void 0, function* () {
+        checkIfCollectionInitialized();
+        try {
+            const result = yield maintenanceCollection.findOneAndUpdate({ carPart: oldRecord.carPart, lastChanged: oldRecord.lastChanged, nextChange: oldRecord.nextChange }, // Find the car by the current make and model
+            { $set: { carPart: newRecord.carPart, lastChanged: newRecord.lastChanged, nextChange: newRecord.nextChange } }, // Set new values for make and model
+            { returnDocument: "after" });
+            if (!result) {
+                return null;
+            }
+            console.log(result);
+            console.log(`Updated record for car part: ${oldRecord.carPart}`);
+            return result;
+        }
+        catch (err) {
+            if (err instanceof mongodb_1.MongoError) {
+                console.log(err.message);
+                throw new Error(err.message);
+            }
+            else if (err instanceof Error) {
+                const msg = "Unexpected error occured in addMaintenanceRecord" + err.message;
+                throw new errorController_1.DatabaseError(err.message);
+            }
+            else {
+                const msg = "Unknown issue caught in addMaintenanceRecord. Should not happen";
+                console.error(msg);
+                throw new errorController_1.DatabaseError(msg);
+            }
+        }
+    });
+}
+/**
+ * Checks if the collection has been initialized
+ * @throws DatabaseError if the collection is not initialized
+ */
 function checkIfCollectionInitialized() {
     if (!maintenanceCollection) {
         throw new errorController_1.DatabaseError("Collection not initialized");

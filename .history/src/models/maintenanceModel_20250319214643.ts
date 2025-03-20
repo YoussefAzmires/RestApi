@@ -224,7 +224,6 @@ export {
   addMaintenanceRecord,
   getAllMaintenanceRecord,
   getOneMaintenanceRecord,
-  deleteOneMaintenanceRecord,
-  updateOneMaintenanceRecord
+  deleteOneMaintenanceRecord
 };
 

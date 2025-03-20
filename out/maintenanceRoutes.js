@@ -10,5 +10,6 @@ router.post("/", maintenanceController_1.handleAddMaintenanceRecord);
 router.get("/", maintenanceController_1.handleGetAllMaintenanceRecord);
 router.get("/carPart/:carPart", maintenanceController_1.handleGetOneMaintenanceRecord);
 router.delete('/carPart/:carPart', maintenanceController_1.handleDeleteOneMaintenanceRecord);
+router.put('/carPart/:carPart', maintenanceController_1.handleUpdateMaintenanceRecord);
 exports.default = router;
 //# sourceMappingURL=maintenanceRoutes.js.map

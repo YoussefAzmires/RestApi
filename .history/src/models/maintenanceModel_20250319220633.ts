@@ -175,11 +175,11 @@ async function deleteOneMaintenanceRecord(carPart: string): Promise<void | null>
   }
 }
 
-async function updateOneMaintenanceRecord(oldRecord:MaintenanceRecord, newRecord:MaintenanceRecord): Promise<MaintenanceRecord | null> {
+async function updateOneMaintenanceRecord(oldCarPart: string, newRecord:MaintenanceRecord): Promise<MaintenanceRecord | null> {
   checkIfCollectionInitialized(); 
   try{
     const result = await maintenanceCollection.findOneAndUpdate(
-      { carPart: oldRecord.carPart, lastChanged: oldRecord.lastChanged, nextChange: oldRecord.nextChange }, // Find the car by the current make and model
+      { carPart: oldCarPart }, // Find the car Part and update by a full new record by the current  
       { $set: { carPart: newRecord.carPart, lastChanged: newRecord.lastChanged, nextChange: newRecord.nextChange }}, // Set new values for make and model
       { returnDocument: "after" } 
     );
@@ -187,7 +187,7 @@ async function updateOneMaintenanceRecord(oldRecord:MaintenanceRecord, newRecord
       return null;
     }
     console.log(result);
-    console.log(`Updated record for car part: ${oldRecord.carPart}`);
+    console.log(`Updated record for car part: ${oldCarPart}`);
     return result
   }
   catch (err: unknown) {

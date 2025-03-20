@@ -13,6 +13,7 @@ exports.handleGetOneMaintenanceRecord = handleGetOneMaintenanceRecord;
 exports.handleGetAllMaintenanceRecord = handleGetAllMaintenanceRecord;
 exports.handleAddMaintenanceRecord = handleAddMaintenanceRecord;
 exports.handleDeleteOneMaintenanceRecord = handleDeleteOneMaintenanceRecord;
+exports.handleUpdateMaintenanceRecord = handleUpdateMaintenanceRecord;
 const maintenanceModel_1 = require("./models/maintenanceModel");
 function handleGetOneMaintenanceRecord(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -52,13 +53,37 @@ function handleGetAllMaintenanceRecord(req, res) {
 function handleAddMaintenanceRecord(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const carPart = req.params.carPart;
-            if (!carPart) {
-                res.status(400).json({ error: "Missing carPart parameter" });
+            const record = req.body;
+            if (!record) {
+                res.status(400).json({ error: "Missing maintenance record data" });
             }
-            const record = yield (0, maintenanceModel_1.getOneMaintenanceRecord)(carPart);
-            console.log(record);
-            res.status(200).json(record);
+            const insertedRecord = yield (0, maintenanceModel_1.addMaintenanceRecord)(record);
+            console.log(insertedRecord);
+            res.status(201).json(insertedRecord);
+        }
+        catch (err) {
+            console.error(err);
+            res.status(500).json({ error: "An error occurred" });
+        }
+    });
+}
+function handleUpdateMaintenanceRecord(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const carPart = req.params.carPart;
+            const updatedData = req.body;
+            const existingRecord = yield (0, maintenanceModel_1.getOneMaintenanceRecord)(carPart);
+            if (!existingRecord) {
+                res.status(404).json({ error: "Maintenance record not found" });
+                return;
+            }
+            // Update the record
+            const updatedRecord = yield (0, maintenanceModel_1.updateOneMaintenanceRecord)(existingRecord, updatedData);
+            if (!updatedRecord) {
+                res.status(404).json({ error: "Update failed" });
+                return;
+            }
+            res.status(200).json(updatedRecord);
         }
         catch (err) {
             console.error(err);
