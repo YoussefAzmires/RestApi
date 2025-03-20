@@ -34,13 +34,13 @@ async function handleGetAllMaintenanceRecord(req: Request, res: Response): Promi
  */
 async function handleAddMaintenanceRecord(req: Request, res: Response): Promise<void> {
     try {
-        const carPart = req.params.carPart;
-        if (!carPart) {
-             res.status(400).json({ error: "Missing carPart parameter" });
+        const record = req.body;
+        if (!record) {
+            res.status(400).json({ error: "Missing maintenance record data" });
         }
-        const record = await getOneMaintenanceRecord(carPart);
-        console.log(record);
-        res.status(200).json(record);
+        const insertedRecord = await addMaintenanceRecord(record);
+        console.log(insertedRecord);
+        res.status(201).json(insertedRecord);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "An error occurred" });
@@ -54,19 +54,18 @@ async function handleAddMaintenanceRecord(req: Request, res: Response): Promise<
  */
 async function handleDeleteOneMaintenanceRecord(req: Request, res: Response): Promise<void> {
     try {
-        const carPart = req.params.carPart;
+        const { carPart } = req.params;  
         if (!carPart) {
             res.status(400).json({ error: "Missing carPart parameter" });
             return;
         }
-        
+
         const result = await deleteOneMaintenanceRecord(carPart);
-        
         if (result === null) {
             res.status(404).json({ error: "Maintenance record not found" });
             return;
         }
-        
+
         res.status(200).json({ message: `Deleted record for car part: ${carPart}` });
     } catch (err) {
         console.error(err);

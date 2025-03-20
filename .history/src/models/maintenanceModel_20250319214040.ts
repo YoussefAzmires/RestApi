@@ -1,6 +1,5 @@
 import { MongoClient, Db, MongoError, Collection } from "mongodb";
 import { DatabaseError } from "../errorController";
-import { resourceUsage } from "process";
 let client: MongoClient;
 let db: Db;
 let maintenanceCollection: Collection<MaintenanceRecord>;
@@ -178,17 +177,7 @@ async function deleteOneMaintenanceRecord(carPart: string): Promise<void | null>
 async function updateOneMaintenanceRecord(oldRecord:MaintenanceRecord, newRecord:MaintenanceRecord): Promise<MaintenanceRecord | null> {
   checkIfCollectionInitialized(); 
   try{
-    const result = await maintenanceCollection.findOneAndUpdate(
-      { carPart: oldRecord.carPart, lastChanged: oldRecord.lastChanged, nextChange: oldRecord.nextChange }, // Find the car by the current make and model
-      { $set: { carPart: newRecord.carPart, lastChanged: newRecord.lastChanged, nextChange: newRecord.nextChange }}, // Set new values for make and model
-      { returnDocument: "after" } 
-    );
-    if(!result){
-      return null;
-    }
-    console.log(result);
-    console.log(`Updated record for car part: ${oldRecord.carPart}`);
-    return result
+    const result  = await maintenanceCollection.updateOne({oldRecord}, {$set: newRecord});
   }
   catch (err: unknown) {
     if (err instanceof MongoError) {

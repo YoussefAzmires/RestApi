@@ -56,18 +56,11 @@ async function handleDeleteOneMaintenanceRecord(req: Request, res: Response): Pr
     try {
         const carPart = req.params.carPart;
         if (!carPart) {
-            res.status(400).json({ error: "Missing carPart parameter" });
-            return;
+             res.status(400).json({ error: "Missing carPart parameter" });
         }
-        
-        const result = await deleteOneMaintenanceRecord(carPart);
-        
-        if (result === null) {
-            res.status(404).json({ error: "Maintenance record not found" });
-            return;
-        }
-        
-        res.status(200).json({ message: `Deleted record for car part: ${carPart}` });
+        const record = await deleteOneMaintenanceRecord(carPart);
+        console.log(record);
+        res.status(200).json(record);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "An error occurred" });

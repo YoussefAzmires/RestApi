@@ -1,6 +1,5 @@
 import { MongoClient, Db, MongoError, Collection } from "mongodb";
 import { DatabaseError } from "../errorController";
-import { resourceUsage } from "process";
 let client: MongoClient;
 let db: Db;
 let maintenanceCollection: Collection<MaintenanceRecord>;
@@ -186,9 +185,8 @@ async function updateOneMaintenanceRecord(oldRecord:MaintenanceRecord, newRecord
     if(!result){
       return null;
     }
-    console.log(result);
     console.log(`Updated record for car part: ${oldRecord.carPart}`);
-    return result
+    
   }
   catch (err: unknown) {
     if (err instanceof MongoError) {

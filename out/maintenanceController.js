@@ -52,13 +52,13 @@ function handleGetAllMaintenanceRecord(req, res) {
 function handleAddMaintenanceRecord(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const record = req.body;
-            if (!record) {
-                res.status(400).json({ error: "Missing maintenance record data" });
+            const carPart = req.params.carPart;
+            if (!carPart) {
+                res.status(400).json({ error: "Missing carPart parameter" });
             }
-            const insertedRecord = yield (0, maintenanceModel_1.addMaintenanceRecord)(record);
-            console.log(insertedRecord);
-            res.status(201).json(insertedRecord);
+            const record = yield (0, maintenanceModel_1.getOneMaintenanceRecord)(carPart);
+            console.log(record);
+            res.status(200).json(record);
         }
         catch (err) {
             console.error(err);
@@ -74,13 +74,15 @@ function handleAddMaintenanceRecord(req, res) {
 function handleDeleteOneMaintenanceRecord(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { carPart } = req.body;
+            const carPart = req.params.carPart;
             if (!carPart) {
-                res.status(400).json({ error: "Missing carPart in request body" });
+                res.status(400).json({ error: "Missing carPart parameter" });
+                return;
             }
             const result = yield (0, maintenanceModel_1.deleteOneMaintenanceRecord)(carPart);
             if (result === null) {
                 res.status(404).json({ error: "Maintenance record not found" });
+                return;
             }
             res.status(200).json({ message: `Deleted record for car part: ${carPart}` });
         }
