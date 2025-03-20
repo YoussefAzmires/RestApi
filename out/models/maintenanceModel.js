@@ -48,7 +48,7 @@ function initialize() {
             client = new mongodb_1.MongoClient(url);
             yield client.connect();
             console.log("Connected to MongoDB!");
-            db = client.db(dbname); // Use your database name
+            db = client.db(dbname);
             // Check if the "maintenance" collection exists, create it if it doesn't
             let collectionCursor = db.listCollections({ name: "maintenance" });
             let collectionArray = yield collectionCursor.toArray();
