@@ -190,8 +190,8 @@ function updateOneMaintenanceRecord(oldRecord, newRecord) {
     return __awaiter(this, void 0, void 0, function* () {
         checkIfCollectionInitialized();
         try {
-            const result = yield maintenanceCollection.findOneAndUpdate({ carPart: oldRecord.carPart, lastChanged: oldRecord.lastChanged, nextChange: oldRecord.nextChange }, // Find the car by the current make and model
-            { $set: { carPart: newRecord.carPart, lastChanged: newRecord.lastChanged, nextChange: newRecord.nextChange } }, // Set new values for make and model
+            const result = yield maintenanceCollection.findOneAndUpdate({ carPart: oldRecord.carPart, lastChanged: oldRecord.lastChanged, nextChange: oldRecord.nextChange }, // Find by old record
+            { $set: { carPart: newRecord.carPart, lastChanged: newRecord.lastChanged, nextChange: newRecord.nextChange } }, // Set new values record
             { returnDocument: "after" });
             if (!result) {
                 return null;

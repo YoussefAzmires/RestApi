@@ -1,11 +1,6 @@
 import { Request, Response } from "express";
 import { getOneMaintenanceRecord, getAllMaintenanceRecord, addMaintenanceRecord, deleteOneMaintenanceRecord, updateOneMaintenanceRecord } from "../models/maintenanceModel";
-/**
- * Handles GET /MaintenanceRecords/carPart
- * Retrieves all maintenance records in the database.
- * Returns 201 with an array of MaintenanceRecord objects on success.
- * Returns 500 with a JSON error object on failure.
- */
+
 async function handleGetOneMaintenanceRecord(req: Request, res: Response): Promise<void> {
     try {
         const carPart = req.params.carPart;
@@ -21,12 +16,6 @@ async function handleGetOneMaintenanceRecord(req: Request, res: Response): Promi
     }
 }
 
-/**
- * Handles GET /MaintenanceRecords
- * Retrieves all maintenance records in the database.
- * Returns 201 with an array of MaintenanceRecord objects on success.
- * Returns 500 with a JSON error object on failure.
- */
 async function handleGetAllMaintenanceRecord(req: Request, res: Response): Promise<void> {
     try{
         const records = await getAllMaintenanceRecord();
@@ -39,11 +28,9 @@ async function handleGetAllMaintenanceRecord(req: Request, res: Response): Promi
     }
 }
 /**
- * Handles POST /MaintenanceRecords
- * Adds a maintenance record to the database.
- * Returns 201 with the inserted MaintenanceRecord object on success.
- * Returns 400 with a JSON error object if the request body is empty.
- * Returns 500 with a JSON error object on failure.
+ * 
+ * @param req 
+ * @param res 
  */
 async function handleAddMaintenanceRecord(req: Request, res: Response): Promise<void> {
     try {
@@ -60,14 +47,6 @@ async function handleAddMaintenanceRecord(req: Request, res: Response): Promise<
     }
 }
 
-
-/**
- * Handles PUT /MaintenanceRecords/carPart
- * Updates a maintenance record in the database.
- * Returns 200 with the updated MaintenanceRecord object on success.
- * Returns 404 with a JSON error object if the record does not exist.
- * Returns 500 with a JSON error object on failure.
- */
 
 async function handleUpdateMaintenanceRecord(req: Request, res: Response): Promise<void> {
     try {
@@ -94,16 +73,11 @@ async function handleUpdateMaintenanceRecord(req: Request, res: Response): Promi
         res.status(500).json({ error: "An error occurred" });
     }
 }
-
 /**
- * Handles DELETE /MaintenanceRecords/carPart
- * Deletes a maintenance record from the database based on the given car part.
- * Returns 200 with a success message on successful deletion.
- * Returns 400 if the carPart parameter is missing.
- * Returns 404 if the maintenance record is not found.
- * Returns 500 with a JSON error object on failure.
+ * 
+ * @param req 
+ * @param res 
  */
-
 async function handleDeleteOneMaintenanceRecord(req: Request, res: Response): Promise<void> {
     try {
         const carPart = req.params.carPart;

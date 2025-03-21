@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const maintenanceModel_1 = require("./models/maintenanceModel");
-const maintenanceRoutes_1 = __importDefault(require("./Controller/maintenanceRoutes"));
+const homeController_1 = __importDefault(require("./Controller/homeController"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 function startServer() {
@@ -22,7 +22,7 @@ function startServer() {
         console.log('Starting server...');
         try {
             yield (0, maintenanceModel_1.initialize)(); // Ensure DB connection
-            app.use('/maintenance', maintenanceRoutes_1.default); // Add the maintenance routes
+            app.use('/MaintenanceRecords', homeController_1.default); // Add the maintenance routes
             app.listen(3000, () => console.log('Server listening on port 3000'));
         }
         catch (err) {
