@@ -239,8 +239,18 @@ function checkIfCollectionInitialized (): void{
     throw new DatabaseError("Collection not initialized");
   }
 }
-
-
+function validateMaintenanceRecord(record: MaintenanceRecord): void {
+  console.log('Validating maintenance record...');
+  if (!record.carPart || record.carPart.trim() === "") {
+    throw new InvalidInputError("carPart is required and cannot be empty");
+  }
+  if (!record.lastChanged) {
+    throw new InvalidInputError("lastChanged is required");
+  }
+  if (!record.nextChange) {
+    throw new InvalidInputError("nextChange is required");
+  }
+}
 export {
   initialize,
   maintenanceCollection,

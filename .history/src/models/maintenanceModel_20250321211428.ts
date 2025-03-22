@@ -51,19 +51,17 @@ interface MaintenanceRecord {
   lastChanged: Date; // Date when the part was last changed
   nextChange?: Date; // Date when the part should be changed next
 }
-
 /**
- * Adds a new maintenance record to the database.
- * 
- * @param record - The MaintenanceRecord object to be added.
- * @returns The inserted MaintenanceRecord object on success, or null if validation fails.
- * @throws Error if a MongoDB error occurs, or a DatabaseError if an unexpected error occurs.
+ * Inserts a Maintenance Record into the database.
+ * @param record The variable of type MaintenanceRecord to be inserted into the database
+ * @returns the record that waas inserted into the database.
  */
-
 async function addMaintenanceRecord(record: MaintenanceRecord): Promise<MaintenanceRecord | null> {
   checkIfCollectionInitialized();
-  if (!record.carPart || record.carPart.trim() === "" || !record.lastChanged || !record.nextChange) {
-    console.log("Invalid record: missing required fields");
+  try {
+    validateMaintenanceRecord(record);
+  } catch (err: unknown) {
+    console.log("Validation error:", err);
     return null;
   }
   try {
@@ -87,14 +85,6 @@ async function addMaintenanceRecord(record: MaintenanceRecord): Promise<Maintena
     }
   }
 }
-/**
- * Retrieves a single maintenance record from the database based on the car part name.
- * @param carPart - The name of the car part to be retrieved.
- * @returns A MaintenanceRecord object if found, or null if no record exists for the given car part.
- * @throws Error if a MongoDB error occurs, or a DatabaseError if an unexpected error occurs.
- */
-
-/******  1a3262a9-5975-4926-881d-67c42d93fbcf  *******/
 async function getOneMaintenanceRecord(carPart: string): Promise<MaintenanceRecord | null> {
   checkIfCollectionInitialized()
   try {
@@ -118,12 +108,9 @@ async function getOneMaintenanceRecord(carPart: string): Promise<MaintenanceReco
     }
   }
 }
-
 /**
- * Retrieves all maintenance records in the database.
- * @Returns an array of MaintenanceRecord objects on success.
- * @Returns an empty array if there are no records.
- * @Returns a JSON error object on failure.
+ * Gets all the maintenance records from the database
+ * @returns An array of all the maintenance records found.
  */
 async function getAllMaintenanceRecord(): Promise<Array<MaintenanceRecord>> {
 
@@ -150,15 +137,11 @@ async function getAllMaintenanceRecord(): Promise<Array<MaintenanceRecord>> {
   }
 }
 
-
 /**
- * Deletes a single maintenance record from the database based on the car part name.
- * 
- * @param carPart - The name of the car part for which the record should be deleted.
- * @returns void if the deletion is successful, or null if no record is found for the given car part.
- * @throws Error if a MongoDB error occurs, or a DatabaseError if an unexpected error occurs.
+ * Takes a name of a car part and deletes it from the database.
+ * @param carPart the name of the carPart record to be deleted
+ * @returns 
  */
-
 async function deleteOneMaintenanceRecord(carPart: string): Promise<void | null> {
   checkIfCollectionInitialized();
 
@@ -188,14 +171,6 @@ async function deleteOneMaintenanceRecord(carPart: string): Promise<void | null>
   }
 }
 
-/**
- * 
- * @param oldRecord - The old record with the car part name, last changed date, and next change date
- * @param newRecord - The new record with the car part name, last changed date, and next change date
- * @returns The updated record if the update is successful, or null if no record is found for the given car part.
- * @throws Error if a MongoDB error occurs, or a DatabaseError if an unexpected error occurs.
- */
-/******  79a1f0f8-5e8a-4091-8605-7b3fb464bfc1  *******/
 async function updateOneMaintenanceRecord(oldRecord:MaintenanceRecord, newRecord:MaintenanceRecord): Promise<MaintenanceRecord | null> {
   checkIfCollectionInitialized(); 
   try{
@@ -239,8 +214,18 @@ function checkIfCollectionInitialized (): void{
     throw new DatabaseError("Collection not initialized");
   }
 }
-
-
+function validateMaintenanceRecord(record: MaintenanceRecord): void {
+  console.log('Validating maintenance record...');
+  if (!record.carPart || record.carPart.trim() === "") {
+    throw new InvalidInputError("carPart is required and cannot be empty");
+  }
+  if (!record.lastChanged) {
+    throw new InvalidInputError("lastChanged is required");
+  }
+  if (!record.nextChange) {
+    throw new InvalidInputError("nextChange is required");
+  }
+}
 export {
   initialize,
   maintenanceCollection,

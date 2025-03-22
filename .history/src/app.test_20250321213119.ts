@@ -45,7 +45,7 @@ afterAll(async () => {
   await mongoServer.stop();
 });
 /*
- * Verifies that the /MaintenanceRecords  endpoint for the POST method correctly inserts and returns a  valid 
+ * Verifies that the /maintenance endpoint for the POST method correctly inserts and returns a  valid 
  * maintenance record
 */
 test("POST /MaintenanceRecords success case", async () => {
@@ -67,7 +67,7 @@ test("POST /MaintenanceRecords success case", async () => {
   
 });
 /**
- * Verifies that the /MaintenanceRecords  endpoint for the POST method returns null if the record inserted is invalid
+ * Verifies that the /maintenance endpoint for the POST method returns null if the record inserted is invalid
  */
 test("POST /MaintenanceRecords failure case", async () => {
   const invalidRecord: MaintenanceRecord = {
@@ -82,7 +82,7 @@ test("POST /MaintenanceRecords failure case", async () => {
 });
 
 /**
- * Verifies that the /MaintenanceRecords/:carPart  endpoint for the GET method returns a record if the carPart exists in the database
+ * Verifies that the /maintenance/carPart/:carPart endpoint for the GET method returns a record if the carPart exists in the database
  */
 test("GET /MaintenanceRecords/:carPart success case", async () => {
   const testRecord: MaintenanceRecord = {
@@ -103,7 +103,7 @@ test("GET /MaintenanceRecords/:carPart success case", async () => {
 });
 
 /**
- * Verifies that the /MaintenanceRecords/:carPart  endpoint for the GET method returns null if the carPart does not exist in the database
+ * Verifies that the /maintenance/carPart/:carPart endpoint for the GET method returns null if the carPart does not exist in the database
  */
 test("GET /MaintenanceRecords/:carPart failure case", async () => {
   const testRecord: MaintenanceRecord = {
@@ -118,7 +118,7 @@ test("GET /MaintenanceRecords/:carPart failure case", async () => {
 });
 
 /**
- * Verifies that the /MaintenanceRecords endpoint for the GET method returns all maintenance records
+ * Verifies that the /maintenance endpoint for the GET method returns all maintenance records
  */
 test("GET /MaintenanceRecords success case", async () => {
   const testRecord1: MaintenanceRecord = {
@@ -145,17 +145,17 @@ test("GET /MaintenanceRecords success case", async () => {
 });
 
   /**
-   * Verifies that the /MaintenanceRecords endpoint for the GET method returns an empty array if there are no maintenance records
+   * Verifies that the /maintenance endpoint for the GET method returns an empty array if there are no maintenance records
    */
   test("GET /MaintenanceRecords empty case", async () => {
-    const response = await request.get('/MaintenanceRecords');
+    const response = await request.get('/maintenance');
     const allRecords = response.body;
   
     expect(allRecords.length).toBe(0);
   });
 
   /**
-   * Verifies that the /MaintenanceRecords/:carPart  endpoint for the DELETE method correctly deletes a record through a carPart string
+   * Verifies that the /maintenance/carPart/:carPart endpoint for the DELETE method correctly deletes a record through a carPart string
    */
   test("DELETE /MaintenanceRecords/:carPart success case", async () => {
     const testRecord1: MaintenanceRecord = {
@@ -176,7 +176,7 @@ test("GET /MaintenanceRecords success case", async () => {
     expect(allRecords.length).toBe(0);
   });
   /**
-   * Verifies that the /MaintenanceRecords/:carPart  endpoint for the DELETE method returns null if the carPart does not exist and does not delete any records
+   * Verifies that the /maintenance/carPart/:carPart endpoint for the DELETE method returns null if the carPart does not exist and does not delete any records
    */
   test("DELETE /MaintenanceRecords/:carPart failure case", async () => {
     const testRecord1: MaintenanceRecord = {
@@ -189,16 +189,15 @@ test("GET /MaintenanceRecords success case", async () => {
   
     await request.delete('/MaintenanceRecords/nonexistentpart');
   
-    const response = await request.get('/MaintenanceRecords/airbags');
+    const response = await request.get('/maintenance/airbags');
     const result = response.body;
   
     expect(result).not.toBeNull();
     expect(result?.carPart).toBe("airbags");
   });
-   
-  /**
-   * Verifies that the /MaintenanceRecords/:carPart endpoint for the PUT method correctly updates a record
-   */
+    /**
+     * 
+     */
     test("PUT /MaintenanceRecords/:carPart success case", async () => {
       const oldRecord: MaintenanceRecord = {
         carPart: "airbags",
@@ -228,7 +227,7 @@ test("GET /MaintenanceRecords success case", async () => {
     });
     
     /**
-     * Verifies that the /MaintenanceRecords/:carPart endpoint for the PUT method returns null if the old record does not exist
+     * Verifies that the /maintenance/carPart/:carPart endpoint for the PUT method returns null if the old record does not exist
      */
     test("PUT /MaintenanceRecords/:carPart failure case", async () => {
       const oldRecord: MaintenanceRecord = {
@@ -247,7 +246,7 @@ test("GET /MaintenanceRecords success case", async () => {
     
       const response = await request.put(`/MaintenanceRecords/nonexistentpart`).send(newRecord);
     
-      expect(response.body).toStrictEqual({"error": "Maintenance record not found"});
+      expect(response.body).toBe({"error": "Maintenance record not found"});
     });
 
 

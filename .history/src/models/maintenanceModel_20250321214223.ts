@@ -188,14 +188,6 @@ async function deleteOneMaintenanceRecord(carPart: string): Promise<void | null>
   }
 }
 
-/**
- * 
- * @param oldRecord - The old record with the car part name, last changed date, and next change date
- * @param newRecord - The new record with the car part name, last changed date, and next change date
- * @returns The updated record if the update is successful, or null if no record is found for the given car part.
- * @throws Error if a MongoDB error occurs, or a DatabaseError if an unexpected error occurs.
- */
-/******  79a1f0f8-5e8a-4091-8605-7b3fb464bfc1  *******/
 async function updateOneMaintenanceRecord(oldRecord:MaintenanceRecord, newRecord:MaintenanceRecord): Promise<MaintenanceRecord | null> {
   checkIfCollectionInitialized(); 
   try{
@@ -239,8 +231,18 @@ function checkIfCollectionInitialized (): void{
     throw new DatabaseError("Collection not initialized");
   }
 }
-
-
+function validateMaintenanceRecord(record: MaintenanceRecord): void {
+  console.log('Validating maintenance record...');
+  if (!record.carPart || record.carPart.trim() === "") {
+    throw new InvalidInputError("carPart is required and cannot be empty");
+  }
+  if (!record.lastChanged) {
+    throw new InvalidInputError("lastChanged is required");
+  }
+  if (!record.nextChange) {
+    throw new InvalidInputError("nextChange is required");
+  }
+}
 export {
   initialize,
   maintenanceCollection,
